@@ -1,6 +1,5 @@
 package io.redspark.thot.controller.dto;
 
-import io.redspark.thot.model.Lead;
 import io.redspark.thot.model.LeadStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,12 +10,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LeadDTO {
+public class CreateLeadDTO {
 
-    private Long id;
-    private String company;
     private String description;
-    private String vendorName;
     private LeadStatus status;
+    private String company;
+    private Long vendorId;
 
 }

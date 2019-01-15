@@ -1,9 +1,12 @@
 package io.redspark.thot.service.impl;
 
+import io.redspark.thot.controller.dto.CreateLeadDTO;
 import io.redspark.thot.controller.dto.LeadDTO;
 import io.redspark.thot.exception.NotFoundException;
 import io.redspark.thot.model.Lead;
+import io.redspark.thot.model.User;
 import io.redspark.thot.repository.LeadRepository;
+import io.redspark.thot.repository.UserRepository;
 import io.redspark.thot.service.LeadService;
 import org.apache.catalina.mapper.Mapper;
 import org.modelmapper.ModelMapper;
@@ -18,18 +21,20 @@ import java.util.stream.Collectors;
 public class LeadServiceImpl implements LeadService {
 
     private LeadRepository leadRepository;
+    private UserRepository userRepository;
     private ModelMapper modelMapper;
 
     public LeadServiceImpl(LeadRepository leadRepository,
+                           UserRepository userRepository,
                            ModelMapper modelMapper) {
         this.leadRepository = leadRepository;
+        this.userRepository = userRepository;
         this.modelMapper = modelMapper;
     }
 
     @Override
-    public LeadDTO create(LeadDTO leadDTO) {
-        leadDTO.setId(null);
-        Lead lead = modelMapper.map(leadDTO, Lead.class);
+    public LeadDTO create(CreateLeadDTO createLeadDTO) {
+        Lead lead = modelMapper.map(createLeadDTO, Lead.class);
         lead = leadRepository.save(lead);
         return modelMapper.map(lead, LeadDTO.class);
     }
@@ -50,13 +55,17 @@ public class LeadServiceImpl implements LeadService {
     }
 
     @Override
-    public LeadDTO update(Long id, LeadDTO leadDTO) {
+    public LeadDTO update(Long id, CreateLeadDTO createLeadDTO) {
         Lead lead = leadRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
-        lead.setDescription(leadDTO.getDescription());
-        lead.setCompany(leadDTO.getCompany());
-        lead.setStatus(leadDTO.getStatus());
-        lead.setVendor(leadDTO.getVendor());
+        lead.setDescription(createLeadDTO.getDescription());
+        lead.setCompany(createLeadDTO.getCompany());
+        lead.setStatus(createLeadDTO.getStatus());
+
+        User vendor = userRepository.findById(createLeadDTO.getVendorId())
+                .orElseThrow(NotFoundException::new);
+
+        lead.setVendor(vendor);
 
         lead = leadRepository.save(lead);
         return modelMapper.map(lead, LeadDTO.class);

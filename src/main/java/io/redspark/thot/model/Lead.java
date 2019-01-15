@@ -25,8 +25,9 @@ public class Lead {
     @Column
     private String company;
 
-    @Column
-    private String vendor;
+    @ManyToOne
+    @JoinColumn(name = "VENDOR_ID")
+    private User vendor;
 
     @Column
     @Enumerated(EnumType.STRING)
