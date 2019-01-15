@@ -8,12 +8,12 @@ public interface LeadService {
 
     LeadDTO create(LeadDTO leadDTO);
 
-    LeadDTO findById(Integer id);
+    LeadDTO findById(Long id);
 
     List<LeadDTO> findAll();
 
-    LeadDTO update(Integer id, LeadDTO leadDTO);
+    LeadDTO update(Long id, LeadDTO leadDTO);
 
-    void delete(Integer id);
+    void delete(Long id);
 
 }

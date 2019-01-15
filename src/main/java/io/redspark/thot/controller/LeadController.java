@@ -24,7 +24,7 @@ public class LeadController {
     }
 
     @GetMapping("{id}")
-    public LeadDTO findById(@PathVariable Integer id) {
+    public LeadDTO findById(@PathVariable Long id) {
         return leadService.findById(id);
     }
 
@@ -34,13 +34,13 @@ public class LeadController {
     }
 
     @PutMapping("{id}")
-    public LeadDTO update(@PathVariable Integer id,
+    public LeadDTO update(@PathVariable Long id,
                           @RequestBody LeadDTO leadDTO) {
         return leadService.update(id, leadDTO);
     }
 
     @DeleteMapping("{id}")
-    public void delete(@PathVariable Integer id) {
+    public void delete(@PathVariable Long id) {
         leadService.delete(id);
     }
 
