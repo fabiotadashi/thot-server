@@ -8,13 +8,10 @@ import io.redspark.thot.model.User;
 import io.redspark.thot.repository.LeadRepository;
 import io.redspark.thot.repository.UserRepository;
 import io.redspark.thot.service.LeadService;
-import org.apache.catalina.mapper.Mapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,8 +44,14 @@ public class LeadServiceImpl implements LeadService {
     }
 
     @Override
-    public List<LeadDTO> findAll() {
-        return leadRepository.findAll()
+    public List<LeadDTO> findAll(String description) {
+        List<Lead> leadList;
+        if(description != null && !description.isEmpty()){
+            leadList = leadRepository.findAllByDescriptionLike("%"+description+"%");
+        }else {
+            leadList = leadRepository.findAll();
+        }
+        return leadList
                 .stream()
                 .map(lead -> modelMapper.map(lead, LeadDTO.class))
                 .collect(Collectors.toList());

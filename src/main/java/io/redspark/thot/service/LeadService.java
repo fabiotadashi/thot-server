@@ -11,7 +11,7 @@ public interface LeadService {
 
     LeadDTO findById(Long id);
 
-    List<LeadDTO> findAll();
+    List<LeadDTO> findAll(String description);
 
     LeadDTO update(Long id, CreateLeadDTO createLeadDTO);
 

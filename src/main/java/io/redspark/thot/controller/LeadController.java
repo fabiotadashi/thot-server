@@ -4,6 +4,7 @@ import io.redspark.thot.controller.dto.CreateLeadDTO;
 import io.redspark.thot.controller.dto.LeadDTO;
 import io.redspark.thot.service.LeadService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,8 +31,8 @@ public class LeadController {
     }
 
     @GetMapping
-    public List<LeadDTO> findAll() {
-        return leadService.findAll();
+    public List<LeadDTO> findAll(@RequestParam(required = false) String description) {
+        return leadService.findAll(description);
     }
 
     @PutMapping("{id}")
