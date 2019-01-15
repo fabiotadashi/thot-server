@@ -1,4 +1,4 @@
-package io.redspark.thot.model;
+package io.redspark.thot.model.enums;
 
 public enum LeadStatus {
 

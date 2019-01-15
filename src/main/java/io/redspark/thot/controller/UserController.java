@@ -1,30 +1,32 @@
 package io.redspark.thot.controller;
 
-import io.redspark.thot.model.User;
-import io.redspark.thot.repository.UserRepository;
+import io.redspark.thot.controller.dto.CreateUserDTO;
+import io.redspark.thot.controller.dto.UserDTO;
+import io.redspark.thot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("users")
 public class UserController {
 
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @PostMapping
-    public void create() {
-        User user = new User();
-        user.setName(LocalDateTime.now().toString());
-        userRepository.save(user);
+    public UserDTO create(@RequestBody CreateUserDTO createUserDTO) {
+        return userService.create(createUserDTO);
+    }
+
+    @GetMapping
+    public List<UserDTO> findAll() {
+        return userService.findAll();
     }
 
 }

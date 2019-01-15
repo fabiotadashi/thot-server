@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "TB_USER")
@@ -21,5 +22,12 @@ public class User {
 
     @Column
     private String name;
+
+    @OneToMany(mappedBy = "vendor")
+    private List<Lead> leadList;
+
+    @ManyToMany
+    @JoinTable(name = "TB_USER_JOB_TITLE")
+    private List<JobTitle> jobTitleList;
 
 }

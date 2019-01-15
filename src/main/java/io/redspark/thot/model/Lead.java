@@ -1,5 +1,6 @@
 package io.redspark.thot.model;
 
+import io.redspark.thot.model.enums.LeadStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

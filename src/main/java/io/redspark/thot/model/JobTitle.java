@@ -7,17 +7,19 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-
 @Entity
-@Table(name = "TB_COMPANY")
+@Table(name = "TB_JOB_TITLE")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Company {
+public class JobTitle {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column
+    private String title;
 
 }
