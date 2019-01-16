@@ -1,5 +1,6 @@
 package io.redspark.thot.controller;
 
+import io.redspark.thot.controller.dto.CreateLeadDTO;
 import io.redspark.thot.controller.dto.LeadDTO;
 import io.redspark.thot.service.LeadService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +20,12 @@ public class LeadController {
     }
 
     @PostMapping
-    public LeadDTO create(@RequestBody LeadDTO leadDTO) {
-        return leadService.create(leadDTO);
+    public LeadDTO create(@RequestBody CreateLeadDTO createLeadDTO) {
+        return leadService.create(createLeadDTO);
     }
 
     @GetMapping("{id}")
-    public LeadDTO findById(@PathVariable Integer id) {
+    public LeadDTO findById(@PathVariable Long id) {
         return leadService.findById(id);
     }
 
@@ -34,13 +35,13 @@ public class LeadController {
     }
 
     @PutMapping("{id}")
-    public LeadDTO update(@PathVariable Integer id,
-                          @RequestBody LeadDTO leadDTO) {
-        return leadService.update(id, leadDTO);
+    public LeadDTO update(@PathVariable Long id,
+                          @RequestBody CreateLeadDTO createLeadDTO) {
+        return leadService.update(id, createLeadDTO);
     }
 
     @DeleteMapping("{id}")
-    public void delete(@PathVariable Integer id) {
+    public void delete(@PathVariable Long id) {
         leadService.delete(id);
     }
 

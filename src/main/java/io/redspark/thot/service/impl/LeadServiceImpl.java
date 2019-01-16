@@ -1,49 +1,88 @@
 package io.redspark.thot.service.impl;
 
+import io.redspark.thot.controller.dto.CreateLeadDTO;
 import io.redspark.thot.controller.dto.LeadDTO;
+import io.redspark.thot.exception.NotFoundException;
+import io.redspark.thot.model.Lead;
+import io.redspark.thot.model.User;
+import io.redspark.thot.repository.LeadRepository;
+import io.redspark.thot.repository.UserRepository;
 import io.redspark.thot.service.LeadService;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LeadServiceImpl implements LeadService {
 
-    private List<LeadDTO> leadDTOList = new ArrayList<>();
+    private final LeadRepository leadRepository;
+    private UserRepository userRepository;
+    private ModelMapper modelMapper;
+
+    @Autowired
+    public LeadServiceImpl(LeadRepository leadRepository,
+                           UserRepository userRepository,
+                           ModelMapper modelMapper) {
+        this.leadRepository = leadRepository;
+        this.userRepository = userRepository;
+        this.modelMapper = modelMapper;
+    }
 
     @Override
-    public LeadDTO create(LeadDTO leadDTO) {
-        leadDTOList.add(leadDTO);
+    public LeadDTO create(CreateLeadDTO createLeadDTO) {
+
+        Lead lead = modelMapper.map(createLeadDTO, Lead.class);
+        lead = leadRepository.save(lead);
+
+        LeadDTO dto = modelMapper.map(lead, LeadDTO.class);
+        return dto;
+    }
+
+    @Override
+    public LeadDTO findById(Long id) {
+
+        Lead lead = leadRepository.findById(id)
+                .orElseThrow(NotFoundException::new);
+
+        LeadDTO leadDTO = modelMapper.map(lead, LeadDTO.class);
+
         return leadDTO;
     }
 
     @Override
-    public LeadDTO findById(Integer id) {
-        return leadDTOList.stream()
-                .filter(leadDTO -> leadDTO.getId().equals(id))
-                .findFirst()
-                .get();
-    }
-
-    @Override
     public List<LeadDTO> findAll() {
-        return leadDTOList;
+        return leadRepository.findAll()
+                .stream()
+                .map(lead -> modelMapper.map(lead, LeadDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public LeadDTO update(Integer id, LeadDTO leadDTO) {
-        LeadDTO leadDTOFound = findById(id);
-        leadDTOFound.setCompany(leadDTO.getCompany());
-        leadDTOFound.setDescription(leadDTO.getDescription());
-        leadDTOFound.setStatus(leadDTO.getStatus());
-        leadDTOFound.setVendor(leadDTO.getVendor());
-        return leadDTOFound;
+    public LeadDTO update(Long id, CreateLeadDTO createLeadDTO) {
+
+        Lead lead = leadRepository.findById(id)
+                .orElseThrow(NotFoundException::new);
+
+        lead.setCompany(createLeadDTO.getCompany());
+        lead.setDescription(createLeadDTO.getDescription());
+        lead.setLeadStatus(createLeadDTO.getLeadStatus());
+
+        User vendor = userRepository.findById(createLeadDTO.getVendorId())
+                .orElseThrow(NotFoundException::new);
+
+        lead.setVendor(vendor);
+
+        leadRepository.save(lead);
+
+        LeadDTO dto = modelMapper.map(lead, LeadDTO.class);
+        return dto;
     }
 
     @Override
-    public void delete(Integer id) {
-        LeadDTO leadDTO = findById(id);
-        leadDTOList.remove(leadDTO);
+    public void delete(Long id) {
+        leadRepository.deleteById(id);
     }
 }

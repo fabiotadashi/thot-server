@@ -10,12 +10,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LeadDTO {
+public class CreateLeadDTO {
 
-    private Long id;
     private String company;
     private String description;
-    private UserDTO vendor;
+    private Long vendorId;
     private LeadStatus leadStatus;
 
 }

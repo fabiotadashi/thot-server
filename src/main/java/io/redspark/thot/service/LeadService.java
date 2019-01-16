@@ -1,19 +1,20 @@
 package io.redspark.thot.service;
 
+import io.redspark.thot.controller.dto.CreateLeadDTO;
 import io.redspark.thot.controller.dto.LeadDTO;
 
 import java.util.List;
 
 public interface LeadService {
 
-    LeadDTO create(LeadDTO leadDTO);
+    LeadDTO create(CreateLeadDTO createLeadDTO);
 
-    LeadDTO findById(Integer id);
+    LeadDTO findById(Long id);
 
     List<LeadDTO> findAll();
 
-    LeadDTO update(Integer id, LeadDTO leadDTO);
+    LeadDTO update(Long id, CreateLeadDTO createLeadDTO);
 
-    void delete(Integer id);
+    void delete(Long id);
 
 }
