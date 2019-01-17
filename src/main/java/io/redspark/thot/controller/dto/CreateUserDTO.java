@@ -9,6 +9,6 @@ import java.util.List;
 public class CreateUserDTO {
 
     private String name;
-    private List<Long> jobTitleIdList;
+    private List<Long> jobTitleListId;
 
 }

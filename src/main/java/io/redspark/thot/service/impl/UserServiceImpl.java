@@ -35,11 +35,11 @@ public class UserServiceImpl implements UserService {
 
         User user = modeMapper.map(createUserDTO, User.class);
 
-        List<JobTitle> jobTitleList = jobTitleRepository.findAllById(createUserDTO.getJobTitleIdList());
+        List<JobTitle> jobTitleList = jobTitleRepository.findAllById(createUserDTO.getJobTitleListId());
 
         user.setJobTitleList(jobTitleList);
 
-        userRepository.save(user);
+        user = userRepository.save(user);
 
         return modeMapper.map(user, UserDTO.class);
     }
