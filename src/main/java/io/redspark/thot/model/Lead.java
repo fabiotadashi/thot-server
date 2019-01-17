@@ -1,10 +1,10 @@
 package io.redspark.thot.model;
 
-import io.redspark.thot.controller.dto.LeadDTO;
 import io.redspark.thot.enums.LeadStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 
@@ -13,6 +13,7 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Audited
 public class Lead {
 
     @Id
