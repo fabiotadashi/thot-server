@@ -5,6 +5,7 @@ import io.redspark.thot.enums.LeadStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 
@@ -13,6 +14,7 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Audited
 public class Lead {
 
     @Id
@@ -32,5 +34,8 @@ public class Lead {
     @Column
     @Enumerated(EnumType.STRING)
     private LeadStatus leadStatus;
+
+    @Column(name = "ACTIVE")
+    private Boolean active;
 
 }
