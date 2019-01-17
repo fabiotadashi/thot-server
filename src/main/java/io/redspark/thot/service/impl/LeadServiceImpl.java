@@ -10,6 +10,8 @@ import io.redspark.thot.repository.UserRepository;
 import io.redspark.thot.service.LeadService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,6 +37,12 @@ public class LeadServiceImpl implements LeadService {
     public LeadDTO create(CreateLeadDTO createLeadDTO) {
 
         Lead lead = modelMapper.map(createLeadDTO, Lead.class);
+
+        User vendor = userRepository.findById(createLeadDTO.getVendorId())
+                .orElseThrow(NotFoundException::new);
+
+        lead.setVendor(vendor);
+
         lead = leadRepository.save(lead);
 
         LeadDTO dto = modelMapper.map(lead, LeadDTO.class);
@@ -84,5 +92,11 @@ public class LeadServiceImpl implements LeadService {
     @Override
     public void delete(Long id) {
         leadRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<LeadDTO> findAll(Pageable page) {
+        return leadRepository.findAll(page)
+                .map(lead -> modelMapper.map(lead, LeadDTO.class));
     }
 }
