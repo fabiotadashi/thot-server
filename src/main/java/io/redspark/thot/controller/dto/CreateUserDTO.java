@@ -6,10 +6,9 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class UserDTO {
+public class CreateUserDTO {
 
-    private Long id;
     private String name;
-    private List<JobTitleDTO> jobTitleList;
+    private List<Long> jobTitleIdList;
 
 }
