@@ -9,6 +9,7 @@ import io.redspark.thot.repository.UserRepository;
 import io.redspark.thot.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,20 +21,25 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private JobTitleRepository jobTitleRepository;
     private final ModelMapper modeMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
                            JobTitleRepository jobTitleRepository,
-                           ModelMapper modeMapper) {
+                           ModelMapper modeMapper,
+                           PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.jobTitleRepository = jobTitleRepository;
         this.modeMapper = modeMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public UserDTO create(CreateUserDTO createUserDTO) {
 
         User user = modeMapper.map(createUserDTO, User.class);
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         List<JobTitle> jobTitleList = jobTitleRepository.findAllById(createUserDTO.getJobTitleIdList());
 

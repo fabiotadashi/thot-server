@@ -1,8 +1,10 @@
 package io.redspark.thot.model;
 
+import io.redspark.thot.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
@@ -14,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Audited
+@ToString(exclude = {"leadList", "jobTitleList"})
 public class User {
 
     @Id
@@ -29,5 +32,11 @@ public class User {
     @ManyToMany
     @JoinTable(name = "TB_USER_JOB_TITLE")
     private List<JobTitle> jobTitleList;
+
+    @Column
+    private String password;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<Role> roles;
 
 }
