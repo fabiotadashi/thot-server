@@ -1,5 +1,6 @@
 package io.redspark.thot.model;
 
+import io.redspark.thot.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,4 +31,9 @@ public class User {
     @JoinTable(name = "TB_USER_JOB_TITLE")
     private List<JobTitle> jobTitleList;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<Role> roleList;
+
+    @Column
+    private String password;
 }

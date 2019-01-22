@@ -4,6 +4,7 @@ import io.redspark.thot.controller.dto.CreateUserDTO;
 import io.redspark.thot.controller.dto.UserDTO;
 import io.redspark.thot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,5 +29,12 @@ public class UserController {
     public List<UserDTO> findAll() {
         return userService.findAll();
     }
+
+    @GetMapping("me")
+    public UserDTO me() {
+        return userService.getUser();
+    }
+
+
 
 }

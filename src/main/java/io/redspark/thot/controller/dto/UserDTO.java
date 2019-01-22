@@ -1,6 +1,8 @@
 package io.redspark.thot.controller.dto;
 
 
+import io.redspark.thot.enums.Role;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
@@ -11,5 +13,6 @@ public class UserDTO {
     private Long id;
     private String name;
     private List<JobTitleDTO> jobTitleList;
+    private List<Role> roleList;
 
 }
