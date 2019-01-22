@@ -4,6 +4,7 @@ import io.redspark.thot.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
@@ -15,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Audited
+@ToString(exclude = {"leadList", "jobTitleList"})
 public class User {
 
     @Id

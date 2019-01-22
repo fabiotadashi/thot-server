@@ -2,7 +2,6 @@ package io.redspark.thot.controller.dto;
 
 
 import io.redspark.thot.enums.Role;
-import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
