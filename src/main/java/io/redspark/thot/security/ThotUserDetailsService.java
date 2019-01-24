@@ -8,8 +8,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
-
 @Component
 public class ThotUserDetailsService implements UserDetailsService {
 
@@ -24,7 +22,7 @@ public class ThotUserDetailsService implements UserDetailsService {
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getName())
                 .password(user.getPassword())
-                .authorities(Collections.emptyList())
+                .authorities(user.getRoles())
                 .accountExpired(false)
                 .accountLocked(false)
                 .credentialsExpired(false)

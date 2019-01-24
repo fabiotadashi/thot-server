@@ -2,17 +2,19 @@ package io.redspark.thot.service.impl;
 
 import io.redspark.thot.controller.dto.CreateLeadDTO;
 import io.redspark.thot.controller.dto.LeadDTO;
-import io.redspark.thot.exception.NotFoundException;
 import io.redspark.thot.model.Lead;
 import io.redspark.thot.model.User;
 import io.redspark.thot.repository.LeadRepository;
 import io.redspark.thot.repository.UserRepository;
+import io.redspark.thot.security.AuthenticationUtils;
 import io.redspark.thot.service.LeadService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 @Service
 public class LeadServiceImpl implements LeadService {
 
+    public static final String LEAD_NOT_FOUND = "lead.not.found";
     private final LeadRepository leadRepository;
     private UserRepository userRepository;
     private ModelMapper modelMapper;
@@ -40,8 +43,9 @@ public class LeadServiceImpl implements LeadService {
 
         lead.setActive(true);
 
-        User vendor = userRepository.findById(createLeadDTO.getVendorId())
-                .orElseThrow(NotFoundException::new);
+        String userName = AuthenticationUtils.getAuthenticatedUserName();
+
+        User vendor = userRepository.findByName(userName);
 
         lead.setVendor(vendor);
 
@@ -55,7 +59,7 @@ public class LeadServiceImpl implements LeadService {
     public LeadDTO findById(Long id) {
 
         Lead lead = leadRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, LEAD_NOT_FOUND));
 
         LeadDTO leadDTO = modelMapper.map(lead, LeadDTO.class);
 
@@ -74,14 +78,15 @@ public class LeadServiceImpl implements LeadService {
     public LeadDTO update(Long id, CreateLeadDTO createLeadDTO) {
 
         Lead lead = leadRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, LEAD_NOT_FOUND));
 
         lead.setCompany(createLeadDTO.getCompany());
         lead.setDescription(createLeadDTO.getDescription());
         lead.setLeadStatus(createLeadDTO.getLeadStatus());
 
-        User vendor = userRepository.findById(createLeadDTO.getVendorId())
-                .orElseThrow(NotFoundException::new);
+        String userName = AuthenticationUtils.getAuthenticatedUserName();
+
+        User vendor = userRepository.findByName(userName);
 
         lead.setVendor(vendor);
 
@@ -94,7 +99,7 @@ public class LeadServiceImpl implements LeadService {
     @Override
     public LeadDTO delete(Long id) {
         Lead lead = leadRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, LEAD_NOT_FOUND));
         lead.setActive(false);
         lead = leadRepository.save(lead);
         LeadDTO dto = modelMapper.map(lead, LeadDTO.class);

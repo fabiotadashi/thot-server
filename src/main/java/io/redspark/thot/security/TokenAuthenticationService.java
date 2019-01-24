@@ -2,24 +2,23 @@ package io.redspark.thot.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.redspark.thot.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.Date;
 
+@Component
 public class TokenAuthenticationService {
 
-    // TODO extract properties
-    private static final int EXPIRATION_TIME = 300_000;
-    private static final String SECRET = "thotsecret";
-    private static final String HEADER = "Authorization";
-    private static final String PREFIX = "Bearer";
+    private static int EXPIRATION_TIME;
+    private static String SECRET;
+    private static String PREFIX;
 
     public static void addAuthentication(HttpServletResponse response, String username){
         String JWT = Jwts.builder()
@@ -28,11 +27,11 @@ public class TokenAuthenticationService {
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
 
-        response.addHeader(HEADER, String.format("%s %s", PREFIX, JWT));
+        response.addHeader(HttpHeaders.AUTHORIZATION, String.format("%s %s", PREFIX, JWT));
     }
 
     public static Authentication getAuthentication(HttpServletRequest request, ThotUserDetailsService thotUserDetailsService){
-        String JWT = request.getHeader(HEADER);
+        String JWT = request.getHeader(HttpHeaders.AUTHORIZATION);
 
         if(JWT != null){
             String tokenWithoutPrefix = JWT.replace(PREFIX, "");
@@ -52,6 +51,21 @@ public class TokenAuthenticationService {
             }
         }
         return null;
+    }
+
+    @Value("${thot.security.token.expiration}")
+    public void setExpirationTime(int expirationTime){
+        EXPIRATION_TIME = expirationTime;
+    }
+
+    @Value("${thot.security.secret}")
+    public void setSecret(String secret){
+        SECRET = secret;
+    }
+
+    @Value("${thot.security.prefix}")
+    public void setPrefix(String prefix){
+        PREFIX = prefix;
     }
 
 }
