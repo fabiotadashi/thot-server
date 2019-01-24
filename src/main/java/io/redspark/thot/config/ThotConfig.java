@@ -38,7 +38,6 @@ public class ThotConfig {
         List<SecurityScheme> schemeList = new ArrayList<>();
         schemeList.add(new ApiKey("JWT",HttpHeaders.AUTHORIZATION, "header"));
 
-
         return new Docket(DocumentationType.SWAGGER_2)
                 .produces(Collections.singleton("application/json"))
                 .consumes(Collections.singleton("application/json"))
