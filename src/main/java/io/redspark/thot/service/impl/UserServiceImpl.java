@@ -67,7 +67,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO getCurrentUser() {
-        User user = userRepository.findByName(AuthenticationUtils.getAuthenticatedUserName());
+        String authenticatedUserName = AuthenticationUtils.getAuthenticatedUserName();
+        User user = userRepository.findByName(authenticatedUserName);
         return modeMapper.map(user, UserDTO.class);
     }
 }

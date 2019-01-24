@@ -20,6 +20,21 @@ public class TokenAuthenticationService {
     private static String SECRET;
     private static String PREFIX;
 
+    @Value("${thot.security.token.expiration}")
+    public void setExpirationTime(int expirationTime) {
+        EXPIRATION_TIME = expirationTime;
+    }
+
+    @Value("${thot.security.secret}")
+    public void setSecret(String secret) {
+        SECRET = secret;
+    }
+
+    @Value("${thot.security.prefix}")
+    public void setPrefix(String prefix) {
+        PREFIX = prefix;
+    }
+
     public static void addAuthentication(HttpServletResponse response, String username) {
         String JWT = Jwts.builder()
                 .setSubject(username)
@@ -53,18 +68,4 @@ public class TokenAuthenticationService {
         return null;
     }
 
-    @Value("${thot.security.token.expiration}")
-    public void setExpirationTime(int expirationTime) {
-        EXPIRATION_TIME = expirationTime;
-    }
-
-    @Value("${thot.security.secret}")
-    public void setSecret(String secret) {
-        SECRET = secret;
-    }
-
-    @Value("${thot.security.prefix}")
-    public void setPrefix(String prefix) {
-        PREFIX = prefix;
-    }
 }
