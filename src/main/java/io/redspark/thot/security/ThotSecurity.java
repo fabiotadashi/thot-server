@@ -25,7 +25,10 @@ public class ThotSecurity extends WebSecurityConfigurerAdapter {
             "/configuration/ui",
             "/configuration/security",
             "/swagger-ui.html",
-            "/webjars/**"
+            "/webjars/**",
+            "/js/*",
+            "/chat.html",
+            "/chat/**"
     };
 
     @Autowired
