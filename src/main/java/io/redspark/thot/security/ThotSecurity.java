@@ -18,6 +18,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class ThotSecurity extends WebSecurityConfigurerAdapter {
 
+    private static final String[] AUTH_WHITELIST = {
+            "/v2/api-docs",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/webjars/**"
+    };
+
     @Autowired
     private ThotUserDetailsService thotUserDetailsService;
 
@@ -39,11 +49,13 @@ public class ThotSecurity extends WebSecurityConfigurerAdapter {
         http.csrf()
                 .disable()
             .authorizeRequests()
+            .antMatchers(AUTH_WHITELIST)
+                .permitAll()
             .antMatchers(HttpMethod.POST,"/login")
                 .permitAll()
             .antMatchers(HttpMethod.POST, "/users")
                 .permitAll()
-            .antMatchers(HttpMethod.GET,"/leads")
+            .antMatchers(HttpMethod.POST,"/leads")
                 .hasRole("VENDOR")
             .anyRequest()
                 .authenticated()

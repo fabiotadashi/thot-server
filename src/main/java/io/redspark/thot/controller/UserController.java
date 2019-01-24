@@ -6,6 +6,7 @@ import io.redspark.thot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -20,13 +21,18 @@ public class UserController {
     }
 
     @PostMapping
-    public UserDTO create(@RequestBody CreateUserDTO createUserDTO) {
+    public UserDTO create(@RequestBody @Valid CreateUserDTO createUserDTO) {
         return userService.create(createUserDTO);
     }
 
     @GetMapping
     public List<UserDTO> findAll() {
         return userService.findAll();
+    }
+
+    @GetMapping("me")
+    public UserDTO getCurrentUser(){
+        return userService.getCurrentUser();
     }
 
 }

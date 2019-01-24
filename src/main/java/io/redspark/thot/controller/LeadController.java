@@ -8,8 +8,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -24,7 +26,8 @@ public class LeadController {
     }
 
     @PostMapping
-    public LeadDTO create(@RequestBody CreateLeadDTO createLeadDTO) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public LeadDTO create(@RequestBody @Valid CreateLeadDTO createLeadDTO) {
         return leadService.create(createLeadDTO);
     }
 

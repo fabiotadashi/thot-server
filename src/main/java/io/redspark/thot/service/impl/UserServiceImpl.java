@@ -6,11 +6,14 @@ import io.redspark.thot.model.JobTitle;
 import io.redspark.thot.model.User;
 import io.redspark.thot.repository.JobTitleRepository;
 import io.redspark.thot.repository.UserRepository;
+import io.redspark.thot.security.AuthenticationUtils;
 import io.redspark.thot.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,6 +40,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO create(CreateUserDTO createUserDTO) {
 
+        if(userRepository.findByName(createUserDTO.getName()) != null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "user.already.exists");
+        }
+
         User user = modeMapper.map(createUserDTO, User.class);
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -56,5 +63,11 @@ public class UserServiceImpl implements UserService {
                 .stream()
                 .map(user -> modeMapper.map(user, UserDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public UserDTO getCurrentUser() {
+        User user = userRepository.findByName(AuthenticationUtils.getAuthenticatedUserName());
+        return modeMapper.map(user, UserDTO.class);
     }
 }
