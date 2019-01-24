@@ -24,7 +24,7 @@ public class ThotUserDetailsService implements UserDetailsService {
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getName())
                 .password(user.getPassword())
-                .authorities(Collections.emptyList())
+                .authorities(user.getRoles())
                 .accountExpired(false)
                 .accountLocked(false)
                 .credentialsExpired(false)
