@@ -2,6 +2,7 @@ package io.redspark.thot.service.impl;
 
 import io.redspark.thot.controller.dto.CreateLeadDTO;
 import io.redspark.thot.controller.dto.LeadDTO;
+import io.redspark.thot.enums.LeadStatus;
 import io.redspark.thot.model.Lead;
 import io.redspark.thot.model.User;
 import io.redspark.thot.repository.LeadRepository;
@@ -82,7 +83,12 @@ public class LeadServiceImpl implements LeadService {
 
         lead.setCompany(createLeadDTO.getCompany());
         lead.setDescription(createLeadDTO.getDescription());
-        lead.setLeadStatus(createLeadDTO.getLeadStatus());
+
+        if (Math.abs(lead.getLeadStatus().ordinal() - createLeadDTO.getLeadStatus().ordinal()) <= 1) {
+            lead.setLeadStatus(createLeadDTO.getLeadStatus());
+        }else{
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "illegal.lead.status");
+        }
 
         String userName = AuthenticationUtils.getAuthenticatedUserName();
 
