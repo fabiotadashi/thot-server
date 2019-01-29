@@ -2,6 +2,7 @@ package io.redspark.thot.service.impl;
 
 import io.redspark.thot.controller.dto.CreateLeadDTO;
 import io.redspark.thot.controller.dto.LeadDTO;
+import io.redspark.thot.enums.LeadStatus;
 import io.redspark.thot.model.Lead;
 import io.redspark.thot.model.User;
 import io.redspark.thot.repository.LeadRepository;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 public class LeadServiceImpl implements LeadService {
 
     public static final String LEAD_NOT_FOUND = "lead.not.found";
+    public static final String ILLEGAL_LEAD_STATUS = "illegal.lead.status";
     private final LeadRepository leadRepository;
     private UserRepository userRepository;
     private ModelMapper modelMapper;
@@ -82,7 +84,14 @@ public class LeadServiceImpl implements LeadService {
 
         lead.setCompany(createLeadDTO.getCompany());
         lead.setDescription(createLeadDTO.getDescription());
-        lead.setLeadStatus(createLeadDTO.getLeadStatus());
+
+        LeadStatus newStatus = createLeadDTO.getLeadStatus();
+        LeadStatus oldStatus = lead.getLeadStatus();
+        if(checkStatusChange(oldStatus, newStatus)){
+            lead.setLeadStatus(createLeadDTO.getLeadStatus());
+        }else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ILLEGAL_LEAD_STATUS);
+        }
 
         String userName = AuthenticationUtils.getAuthenticatedUserName();
 
@@ -94,6 +103,10 @@ public class LeadServiceImpl implements LeadService {
 
         LeadDTO dto = modelMapper.map(lead, LeadDTO.class);
         return dto;
+    }
+
+    private boolean checkStatusChange(LeadStatus oldStatus, LeadStatus newStatus) {
+        return LeadStatus.MEDIUM.equals(oldStatus) || LeadStatus.MEDIUM.equals(newStatus);
     }
 
     @Override

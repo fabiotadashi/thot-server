@@ -1,4 +1,4 @@
-package io.redspark.thot.config;
+package io.redspark.thot.handler;
 
 import io.redspark.thot.controller.dto.ValidationErrorDTO;
 import org.springframework.beans.factory.annotation.Autowired;
