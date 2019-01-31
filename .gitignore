@@ -16,6 +16,10 @@
 *.iml
 *.ipr
 
+### Log files
+*.log
+*.gz
+
 ### NetBeans ###
 /nbproject/private/
 /build/

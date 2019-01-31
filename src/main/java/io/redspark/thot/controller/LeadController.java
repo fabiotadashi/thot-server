@@ -3,6 +3,8 @@ package io.redspark.thot.controller;
 import io.redspark.thot.controller.dto.CreateLeadDTO;
 import io.redspark.thot.controller.dto.LeadDTO;
 import io.redspark.thot.service.LeadService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +22,8 @@ public class LeadController {
 
     private final LeadService leadService;
 
+    private Logger logger = LoggerFactory.getLogger(LeadController.class);
+
     @Autowired
     public LeadController(LeadService leadService) {
         this.leadService = leadService;
@@ -28,6 +32,7 @@ public class LeadController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public LeadDTO create(@RequestBody @Valid CreateLeadDTO createLeadDTO) {
+        logger.debug(String.format("create lead:%s", createLeadDTO.toString()));
         return leadService.create(createLeadDTO);
     }
 
